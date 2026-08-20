@@ -1,0 +1,30 @@
+READONLYFILE;
+
+IMPORT "all_mbs.tpl";
+IMPORT "../Blades/{{ blade_tpl_file }}";
+
+TIvViewer Viewer;
+TBatch ACM;
+ACM {
+    TTaskAssembly TaskAssembly;
+    TaskAssembly{
+        DefaultState{
+            ModellingMode = "Absolute";
+        }
+    }
+    TStateToCompliant StateToCompliant;
+}
+
+{{blade_tpl_name}} {{ blade_name }};
+{{blade_name}} {
+	tgtLoadCase {
+		REAL MassScaleFactorBlade1 = 1;
+		REAL MassScaleFactorBlade2 = 1;
+		REAL MassScaleFactorBlade3 = 1;
+	}
+
+	Body {
+		MassScaleFactor = (BladeNumber == 1 ) ? tgtLoadCase.MassScaleFactorBlade1: (  (BladeNumber == 2)? tgtLoadCase.MassScaleFactorBlade2: (( BladeNumber == 3 )?tgtLoadCase.MassScaleFactorBlade3: 1  )  );
+	}
+
+}
